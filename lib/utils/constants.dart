@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // API Configuration
 class ApiConfig {
   // Local testing - gunakan ini saat development
-  static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'https://travel-po-api-production-ac8f.up.railway.app';
 
   // Production Railway - uncomment untuk production
   // static const String baseUrl = 'https://travel-po-api-production-ac8f.up.railway.app';
