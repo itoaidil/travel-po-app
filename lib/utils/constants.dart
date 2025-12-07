@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 // API Configuration
 class ApiConfig {
   // Local testing - gunakan ini saat development
-  static const String baseUrl = 'https://travel-po-api-production-ac8f.up.railway.app';
-
-  // Production Railway - uncomment untuk production
-  // static const String baseUrl = 'https://travel-po-api-production-ac8f.up.railway.app';
+  static const String baseUrl =
+      'https://travel-api-production-23ae.up.railway.app';
 
   // Auth Endpoints
-  static const String loginPO = '/api/auth/login';
-  static const String registerPO = '/api/auth/register';
+  static const String loginPO = '/api/po/login';
+  static const String registerPO = '/api/po/register';
 
   // Vehicle Endpoints
   static const String vehicles = '/api/vehicles';
