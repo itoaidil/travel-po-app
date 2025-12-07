@@ -30,8 +30,17 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final poId = authProvider.currentPO?.id ?? 1; // Default to 1 if not set
 
+      // Check if PO is logged in
+      if (authProvider.currentPO == null) {
+        setState(() {
+          _error = 'Silakan login terlebih dahulu';
+          _isLoading = false;
+        });
+        return;
+      }
+
+      final poId = authProvider.currentPO!.id;
       final bookings = await _bookingService.getBookings(poId);
       setState(() {
         _bookings = bookings;
