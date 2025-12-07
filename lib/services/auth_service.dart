@@ -20,10 +20,12 @@ class AuthService {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
+        print('✅ AuthService: Login API success');
         // Save token and PO data
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(_tokenKey, data['token']);
         await prefs.setString(_poKey, jsonEncode(data['po']));
+        print('💾 AuthService: Saved token and PO data to storage');
 
         return {
           'success': true,
@@ -31,6 +33,7 @@ class AuthService {
           'po': PO.fromJson(data['po']),
         };
       } else {
+        print('❌ AuthService: Login API failed - ${data['message']}');
         return {'success': false, 'message': data['message'] ?? 'Login gagal'};
       }
     } catch (e) {
@@ -85,12 +88,23 @@ class AuthService {
 
   // Get saved PO data
   Future<PO?> getSavedPO() async {
-    final prefs = await SharedPreferences.getInstance();
-    final poString = prefs.getString(_poKey);
-    if (poString != null) {
-      return PO.fromJson(jsonDecode(poString));
+    try {
+      print('💾 AuthService: Getting saved PO from storage...');
+      final prefs = await SharedPreferences.getInstance();
+      final poString = prefs.getString(_poKey);
+
+      if (poString != null) {
+        print('✅ AuthService: Found PO data: ${poString.substring(0, 100)}...');
+        final po = PO.fromJson(jsonDecode(poString));
+        return po;
+      } else {
+        print('❌ AuthService: No PO data in storage');
+        return null;
+      }
+    } catch (e) {
+      print('❌ AuthService: Error getting saved PO - $e');
+      return null;
     }
-    return null;
   }
 
   // Check if logged in
