@@ -23,6 +23,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   Future<void> _loadBookings() async {
+    print('📋 BookingsScreen: Starting to load bookings...');
     setState(() {
       _isLoading = true;
       _error = null;
@@ -33,6 +34,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
       // Check if PO is logged in
       if (authProvider.currentPO == null) {
+        print('❌ BookingsScreen: No PO logged in');
         setState(() {
           _error = 'Silakan login terlebih dahulu';
           _isLoading = false;
@@ -41,12 +43,15 @@ class _BookingsScreenState extends State<BookingsScreen> {
       }
 
       final poId = authProvider.currentPO!.id;
+      print('✅ BookingsScreen: Loading bookings for PO ID: $poId');
       final bookings = await _bookingService.getBookings(poId);
+      print('✅ BookingsScreen: Loaded ${bookings.length} bookings');
       setState(() {
         _bookings = bookings;
         _isLoading = false;
       });
     } catch (e) {
+      print('❌ BookingsScreen: Error loading bookings - $e');
       setState(() {
         _error = e.toString();
         _isLoading = false;

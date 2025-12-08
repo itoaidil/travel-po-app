@@ -7,19 +7,30 @@ class BookingService {
 
   Future<List<Map<String, dynamic>>> getBookings(int poId) async {
     try {
+      final url = '$baseUrl/api/bookings?po_id=$poId';
+      print('🌐 BookingService: Fetching bookings from $url');
+      
       final response = await http.get(
-        Uri.parse('$baseUrl/api/bookings?po_id=$poId'),
+        Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
       );
 
+      print('🌐 BookingService: Response status ${response.statusCode}');
+      
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        print('🌐 BookingService: Response data: ${data.toString().substring(0, 200)}...');
+        
         if (data['success'] == true) {
-          return List<Map<String, dynamic>>.from(data['data'] ?? []);
+          final bookings = List<Map<String, dynamic>>.from(data['data'] ?? []);
+          print('✅ BookingService: Parsed ${bookings.length} bookings');
+          return bookings;
         }
       }
+      print('❌ BookingService: Failed to load bookings - Status ${response.statusCode}');
       throw Exception('Failed to load bookings');
     } catch (e) {
+      print('❌ BookingService: Error - $e');
       throw Exception('Error fetching bookings: $e');
     }
   }
